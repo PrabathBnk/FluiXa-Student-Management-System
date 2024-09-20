@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FluiXa Student Management System</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://kit.fontawesome.com/b7e75ffc32.js" crossorigin="anonymous"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" rel="stylesheet" />
+</head>
+<body onload="registerPageOnLoad()">
+
+    <div id="cropModal" class="box d-flex flex-column position-absolute z-3 p-3 d-none">
+        <div id="cropView" class="overflow-hidden">
+            <img id="image" class="d-block w-100" src="" alt="">
+        </div>
+        <div class="d-flex justify-content-center mt-4 mb-4">
+            <button onclick="setStudentPicture()" class="btn btn-picture-box mt-2 me-3 px-4">Set Picture</button>
+            <button onclick="closeCropModal()" class="btn btn-picture-box mt-2 px-4">Cancel</button>
+        </div>
+    </div>
+
+    <div class="container-fluid h-100 main position-relative z-0">
+        <div class="row">
+            <div class="col-xl-3 col-lg-4 col-md-5 col-sm-12 p-0">
+                <div class="box slide-bar  d-flex flex-column justify-content-center px-xl-4 px-3">
+                    <div class="logo-title d-inline-grid text-center px-3">
+                        <img src="img/logo_01.png" class="" alt="">
+                        <h5 class="mt-4">FluiXa Student Management System</h5>
+                        <p>Welcome to manage<br>your data & information better.</p>
+                    </div>
+                    <div class="box time-box py-3 mt-5 text-center">
+                        <p id="time" class="m-0">00:00 AM</p>
+                        <p id="date" class="">Monday, 01 January, 2000</p>
+                    </div>
+                    <div class="d-flex flex-wrap justify-content-center mt-5">
+                        <button onclick="location.href='index.html'" class="btn w-75 btn-slide-bar active">
+                            <i class="fa-solid fa-user-plus me-2"></i> Register Student
+                        </button>
+                        <button onclick="location.href='student_list.html'" class="btn w-75 mt-4 btn-slide-bar">
+                            <i class="fa-solid fa-users me-2"></i> Students List
+                        </button>
+                    </div>
+                    <p class="text-center web-link">www.fluixa.com</p>
+                </div>
+            </div>
+            <div class="col-xl-9 col-lg-8 col-md-7 col-sm-12 ps-xl-5 ps-3 mt-3">
+                <div class="row heading">
+                    <h1>Register Student</h1>
+                    <p>Please fill out the form below to register a new student. Ensure that all required fields are completed accurately to create a student profile in the system.</p>
+                </div>
+                <div class="row">
+                    <div class="col-xl-5 col-md-12">
+                        <div class="box d-flex flex-column p-5 mt-3 me-md-0 me-sm-0 me-0 picture-box ">
+                            <h2>Student Picture</h2>
+                            <p>Upload a clear and recent picture of the student. This image will be used for the student's profile and identification purposes. Make sure the photo is in JPG or PNG format and does not exceed the file size limit.</p>
+                            <div class="overflow-hidden student-pic mx-auto mt-5 mb-4">
+                                <img class="w-100" id="studentPicture" src="img/User.png" alt="">
+                            </div>
+                            <div class="mx-auto mt-5 mb-4">
+                                <button onclick="changePicture()" class="btn btn-picture-box mt-2 me-3 px-4">
+                                    <i class="fa-solid fa-pencil pe-2"></i> Change picture
+                                    <input type="file" onchange="openCropView(event)" id="fileInput" class="d-none" accept="image/png, image/jpeg" autocomplete="off">
+                                </button>
+                                <button onclick="removeStudentPicture()" class="btn btn-picture-box mt-2 px-4">
+                                    <i class="fa-solid fa-trash-can pe-2 "></i> Remove
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-7 pe-3 ">
+                        <div class="box d-flex flex-column mt-3 mb-4 info-box">
+                            <h4 class="student-id">Student ID | <span id="studentId"></span></h4>
+                            <div class="mt-2">
+                                <h2 class="form-sub-heading">Student Information</h2>
+                                <div class="form-field mb-3 mt-3">
+                                    <label for="txtFullName" class="">Full Name</label>
+                                    <input type="text" class="" id="txtFullName" autocomplete="off">
+                                </div>
+                                <div class="d-flex justify-content-between mb-3">
+                                    <div class="form-field me-xl-4 w-100 me-3">
+                                        <label for="txtAge" class="">Age</label>
+                                        <input type="number" onkeyup="preventNonDigits(event)" id="txtAge" autocomplete="off">
+                                    </div>
+                                    
+                                    <div class="form-field gender-box w-100">
+                                        <label for="dlGender" class="">Gender</label>
+                                        <select name="gender" id="dlGender" autocomplete="off">
+                                            <option value="M">Male</option>
+                                            <option value="F">Female</option>
+                                            <option selected disabled value=""></option>
+                                        </select>
+                                    </div>
+                                    
+                                </div>
+                                <div class="form-field mb-3">
+                                    <label for="txtContact" class="">Contact Number</label>
+                                    <input type="text" onkeyup="preventNonDigits(event)" class="" id="txtContact" autocomplete="off">
+                                </div>
+                                <div class="form-field mb-3">
+                                    <label for="txtEmail" class="">Email Address</label>
+                                    <input type="email" class="" id="txtEmail" autocomplete="off">
+                                </div>
+                            </div>
+                            <div class=" mt-3">
+                                <h2 class="form-sub-heading">Guardian Information</h2>
+                                <div class="form-field mb-3 mt-3">
+                                    <label for="txtGuarFullName" class="">Full Name</label>
+                                    <input type="text" class="" id="txtGuarFullName" autocomplete="off">
+                                </div>
+                                <div class="form-field mb-3">
+                                    <label for="txtGuarAddress" class="">Address</label>
+                                    <input type="text" class="" id="txtGuarAddress" autocomplete="off">
+                                </div>
+                                <div class="form-field mb-3">
+                                    <label for="txtGuarContact" class="">Contact Number</label>
+                                    <input type="text" onkeyup="preventNonDigits(event)" class="" id="txtGuarContact" autocomplete="off">
+                                </div>
+                            </div>
+                            <div class="mt-3 form-footer">
+                                <p>Please ensure that all the information provided is accurate and complete. Once you submit the form, a student profile will be created in the system. You may review and edit the details before finalizing the registration.</p>
+                                <div class="float-end me-4 mt-3">
+                                    <button onclick="btnRegiterOnClick()" class="me-3" id="btnRegister">Register</button>
+                                    <button class="" id="btnClear">Clear</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.js" integrity="sha512-JyCZjCOZoyeQZSd5+YEAcFgz2fowJ1F1hyJOXgtKu4llIa0KneLcidn5bwfutiehUTiOuK87A986BZJMko0eWQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="app.js"></script>
+</body>
+</html>

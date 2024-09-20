@@ -1,0 +1,365 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+*{
+    font-family: "Poppins", system-ui;
+    font-weight: 400;
+}
+
+body{
+    width: 100vw;
+    background-color: #F1F1F1;
+    overflow-x: hidden;
+}
+
+.box{
+    border-radius: 1.3rem;
+}
+
+.slide-bar{
+    height: calc(98vh - 1rem);
+    background-color: #1E85F2;
+    margin-right: calc(2vw);
+}
+
+.main{
+    background-color: #F1F1F1;
+    padding-inline: calc(1.4rem + 0.5vw) !important;
+    padding-block: calc(1vw);
+}
+
+.logo-title h5{
+    color: #F5FCFF;
+    font-weight: 500;
+    font-size: calc(0.9rem + 0.2vw);
+}
+
+.logo-title p{
+    color: #BDE6FF;
+    font-size: calc(0.6rem + 0.25vw);
+    line-height: 1rem;
+}
+
+.logo-title img{
+    justify-self: center;
+    width: calc(8rem + 1vw);
+}
+
+.time-box{
+    background-color: #F1F1F1;
+}
+
+#time{
+    font-weight: 600;
+    font-size: calc(2.2rem + 1vw);
+    color: #424547;
+    margin-bottom: -1rem !important;
+    letter-spacing: -0.1rem;
+}
+
+#date{
+    color: #424547;
+    font-size: calc(0.7rem + 0.15vw);
+}
+
+.btn-slide-bar{
+    color: #F1F1F1 !important;
+    border-radius: 0.8rem !important;
+    border: 1px solid #F1F1F1 !important;
+    font-weight: 500;
+    font-size: calc(0.8rem + 0.15vw) !important;
+    transition: transform 0.3s ease !important;
+}
+
+.btn-slide-bar:hover{
+    transform: scale(1.1);
+}
+
+.active{
+    background-color: #F1F1F1 !important;
+    color: #1E85F2 !important;
+}
+
+.web-link{
+    color: #F1F1F1;
+    font-size: calc(0.7rem + 0.2vw);
+    margin-top: calc(10rem);
+}
+
+.heading h1{
+    font-weight: 600;
+    font-size: calc(2.2rem + 0.7vw);
+    color: #2F3234;
+}
+
+.heading p{
+    font-size: calc(0.7rem + 0.2vw);
+    color: #95989A;
+}
+
+.student-pic{
+    width: calc(11rem + 3vw);
+    border-radius: 999px;
+}
+
+.picture-box{
+    margin-left: calc(1rem);
+    margin-right: calc(1.5rem + 1.5vw);
+}
+
+.picture-box h2{
+    color: #616567;
+    font-weight: 500;
+    font-size: calc(1.3rem + 0.5vw);
+    margin-bottom: 0.2rem;
+}
+
+.picture-box p{
+    font-size: calc(0.5rem + 0.2vw);
+    color: #95989A;
+}
+
+.btn-picture-box{
+    background-color: #ECECEC !important;
+    color: #424547 !important;
+    border-radius: 0.6rem !important;
+    font-size: calc(0.5rem + 0.25vw) !important;
+}
+
+.btn-picture-box:hover{
+    background-color: #d8d8d8 !important;
+}
+
+.info-box, .picture-box{
+    background-color: #fff;
+    border-radius: 3rem;
+}
+
+.info-box{
+    padding-inline: calc(3rem + 1.5vw);
+    padding-block: 2rem;
+}
+
+.student-id{
+    color: #95989A;
+    font-weight: 500;
+    font-size: calc(1.1rem + 0.2vw);
+}
+
+#studentId{
+    color: #1E85F2;
+    font-weight: 600;
+}
+
+.form-sub-heading{
+    color: #616567;
+    font-weight: 600;
+    font-size: calc(1.3rem + 0.3vw);
+}
+
+.form-field input, .form-field select{
+    width: 100%;
+    padding: 0.4rem 1.2rem;
+    border-radius: 0.7rem;
+    border: 0.15rem solid #ECECEC;
+    background-color: #ECECEC;
+    transition: border .3s ease, box-shadow .3s ease;;
+}
+
+.form-field label{
+    position: absolute;
+    padding-left: 1.2rem;
+    color: #616567;
+    transition: .4s ease;
+}
+
+.form-field label, .form-field h2{
+    font-size: calc(0.7rem + 0.1vw) ;
+}
+
+.form-field{
+    display: flex;
+    align-items: center;
+}
+
+.form-field input:focus, .form-field select:focus{
+    outline: none;
+    border-color: #1E85F2;
+    box-shadow: 0 0 0 0.2rem #1e84f234;
+    background-color: #fff !important;
+}
+
+.focus{
+    margin-top: -2.7rem;
+    margin-left: 1.5rem;
+    padding-inline: 0.5rem !important;
+    color: #1E85F2 !important;
+    background-color: #fff;
+}
+
+.filled input, .filled select{
+    border-color: #979a9c;
+    background-color: #fff !important;
+}
+
+.filled label{
+    margin-top: -2.7rem;
+    margin-left: 1.5rem;
+    padding-inline: 0.5rem !important;
+    background-color: #fff;
+}
+
+.form-footer p{
+    font-size: calc(0.5rem + 0.2vw);
+    color: #95989A;
+}
+
+.form-footer button{
+    border: 0.15rem solid #fff;
+    border-radius: 0.6rem !important;
+    font-size: calc(0.6rem + 0.25vw);
+    transition: background-color 0.2s ease !important;
+}
+
+#btnRegister{
+    background-color: #1E85F2;
+    color: #fff;
+    border-color: #1E85F2;
+    padding: 0.2rem 2.8rem;
+}
+
+#btnClear{
+    background-color: #fff;
+    color: #F41D4B;
+    border-color: #F41D4B;
+    padding: 0.2rem 2rem;
+    
+}
+
+#btnRegister:hover{
+    background-color: #0169d8;
+}
+
+#btnRegister:active{
+    border-color: #49a1ff;
+    background-color: #49a1ff;
+}
+
+#btnClear:hover{
+    background-color: #F41D4B;
+    color: #fff;
+}
+
+#btnClear:active{
+    border-color: #fd5d80;
+    background-color: #fd5d80;
+}
+
+.table{
+    table-layout: fixed;
+}
+
+.table td{
+    overflow: hidden !important;
+    color: #424547 !important;
+    border-color: #BDC1C3;
+    padding-block: 0.8rem !important;
+}
+
+.table td:hover{
+    cursor: pointer;
+}
+
+.table th{
+    color: #95989A !important;
+    font-weight: 400 !important;
+}
+
+.student-list-box{
+    background-color: #fff;
+    height: 76vh;
+}
+
+.student-list-box div{
+    height: 96%;
+    overflow: auto;
+}
+
+.detail-dialog{
+    background-color: #fff;
+    box-shadow: 0 0.4rem 1.5rem #33333362;
+    top: 4vw;
+    right: 5.5rem;
+    animation: swipeIn 0.4s;
+}
+
+.contact-table th{
+    color: #95989A;
+    font-weight: 500;
+    font-size: 1.05rem;
+    border-bottom: 0.12rem solid #95989A;
+}
+
+.contact-table td{
+    font-size: 0.85rem;
+    padding-block: 0.3rem;
+    border-bottom: 0.1rem solid #E0E1E1;
+    padding-left: 0.5rem;
+    color: #424547;
+}
+
+.contact-table td:first-child{
+    color: #95989A !important;
+}
+
+.error input, .error select{
+    background-color: #fff;
+    border-color: #F41D4B;
+}
+
+.error label{
+    color: #F41D4B;
+}
+
+#image{
+    max-width: 100%;
+}
+
+#cropModal{
+    background-color: #fff;
+    box-shadow: 0 0.4rem 1.5rem #33333362;
+    top: 11rem;
+    left: 38rem;
+}
+
+#cropView{
+    width: 25rem;
+    height: 25rem;
+    border-radius: 1rem;
+}
+
+
+@keyframes swipeIn{
+    from {
+        right: -5rem;
+        opacity: 0;
+    }
+    to {
+        right: 5.5rem;
+        opacity: 1;
+    }
+}
+
+@media (max-width: 768px){
+    .slide-bar{
+        margin-right: 0;
+        margin-top: 0.2rem;
+    }
+}
+
+@media (max-width: 450px){
+    #btnClear{
+        margin-top: 0.5rem;
+    }
+}
+
+
