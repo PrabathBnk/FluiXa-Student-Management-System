@@ -1,0 +1,22 @@
+CREATE DATABASE FluiXaStudentDB;
+USE FluiXaStudentDB;
+
+CREATE TABLE Student(
+	StudentId VARCHAR(10),
+	Name VARCHAR(100) NOT NULL,
+	Age INT(10) NOT NULL,
+	Gender ENUM('M', 'F') NOT NULL,
+	Contact VARCHAR(15) NOT NULL,
+	Email VARCHAR(50),
+	PRIMARY KEY(StudentId)
+);
+
+CREATE TABLE Guardian(
+	StudentId VARCHAR(10),
+	GuardianId VARCHAR(5),
+	Name VARCHAR(100) NOT NULL,
+	Address VARCHAR(50),
+	Contact VARCHAR(15),
+	PRIMARY KEY(StudentId, GuardianId),
+	FOREIGN KEY(StudentId) REFERENCES Student(student_id)
+);
