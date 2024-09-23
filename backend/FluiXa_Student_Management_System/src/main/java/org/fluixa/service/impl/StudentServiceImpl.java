@@ -29,7 +29,8 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public void updateStudent(Student student) {
+    public void updateStudent(Student student, MultipartFile file) throws IOException {
+        student.setStudentPicture(Base64.getEncoder().encodeToString(file.getBytes()));
         repository.save(student);
     }
 

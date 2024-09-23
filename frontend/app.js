@@ -10,14 +10,14 @@ function setTime(){
     if(hours == 0 && min == 0) setDate;
 
     let AmOrPM = hours <= 12 ? "AM": "PM";
-    hours = hours == 0 ? 12 : hours % 12;
+    hours = hours <= 12 ? hours : hours % 12;
 
     document.getElementById("time").innerHTML = `${hours < 10 ? '0'+ hours: hours}:${min < 10 ? '0'+ min: min} ${AmOrPM}`
 }
 
 function setDate(){
     let today = new Date();
-    document.getElementById("date").innerHTML = `${weekday(today.getDay())}, ${today.getDate()} ${monthInName(today.getMonth())}, ${today.getFullYear()}`;
+    document.getElementById("date").innerHTML = `${weekday(today.getDay())}, ${monthInName(today.getMonth())} ${today.getDate()}, ${today.getFullYear()}`;
 }
 
 function monthInName(month){
@@ -87,9 +87,8 @@ function studentListPageOnLoad(){
 
     document.getElementById("main").addEventListener("click", function(){
         let modal = document.getElementById("contactModal");
-    
         let lastClass = modal.classList[modal.classList.length - 1];
-    
+
         if(lastClass != "d-none") {
             modal.classList.add("d-none");
         }
@@ -121,8 +120,8 @@ function loadStudents(){
                                 <td class="text-center">${data[i].age}</td>
                                 <td> - </td>
                                 <td>
-                                    <i class="fa-solid fa-pencil me-4"></i>
-                                    <i class="fa-solid fa-trash-can"></i>
+                                    <i onclick="openEditModal(event)" class="fa-solid fa-pencil ps-4 me-4"></i>
+                                    <i onclick="deleteStudent(event)" class="fa-solid fa-trash-can"></i>
                                 </td>
                             </tr>`
         }
@@ -138,6 +137,8 @@ function openContactModal(event){
     let tr = event.target.parentElement;
     if(tr.tagName != "TR") return;
     
+    document.getElementById("contactModal").classList.add("swipe-in");
+
     fetch(`http://localhost:8080/get-student/${tr.id}`)
     .then(res => res.json())
     .then(data => {
@@ -212,6 +213,7 @@ function btnRegiterOnClick(){
           .then(res => {
             if(res.ok){
                 alert("Student registration successfull.");
+                cropper = null;
                 location.reload();
             }else{
                 alert("Something went wrong! Please try again.")
@@ -278,7 +280,7 @@ function openCropView(event){
                 viewMode: 3,
                 dragMode: 'move',
                 background: false
-            });
+            });            
         }
 
         document.getElementById("cropModal").classList.remove("d-none");
@@ -293,10 +295,133 @@ function closeCropModal(){
 }
 
 function setStudentPicture(){
-    document.getElementById("studentPicture").src = cropper.getCroppedCanvas().toDataURL("image/png");
+    try {
+        document.getElementById("studentPicture").src = cropper.getCroppedCanvas().toDataURL("image/png");
+        document.getElementById("emStudentPicture").src = cropper.getCroppedCanvas().toDataURL("image/png");
+    } catch (error) {
+        console.log(error);
+        
+    }
     closeCropModal();
 }
 
 function removeStudentPicture(){
     document.getElementById("studentPicture").src = "img/User.png";
+    document.getElementById("emStudentPicture").src = "img/User.png";
+}
+
+function openEditModal(event){
+    let tr = event.target.parentElement.parentElement;
+    let studentId = tr.children[1].innerText;
+    
+    fetch(`http://localhost:8080/get-student/${studentId}`)
+    .then(res => res.json())
+    .then(data => {
+        
+        document.getElementById("txtName").value = data.name;
+        document.getElementById("txtAge").value = data.age;
+        document.getElementById("dlGender").value = data.gender;
+        document.getElementById("txtContact").value = data.contact;
+        document.getElementById("txtEmail").value = data.email;
+        document.getElementById("emStudentId").innerText = data.studentId;
+        
+        document.getElementById("emStudentPicture").src = "data:image/jpeg;base64," + data.studentPicture;
+    });
+    
+    let modal = document.getElementById("editModal");
+
+    modal.classList.remove("d-none");
+    document.getElementById("freez").classList.remove("d-none");
+}
+
+function saveChanges(){
+    let student = {
+        studentId: document.getElementById("emStudentId").innerText,
+        name: document.getElementById("txtName").value,
+        age: document.getElementById("txtAge").valueAsNumber,
+        gender: document.getElementById("dlGender").value,
+        contact: document.getElementById("txtContact").value,
+        email: document.getElementById("txtEmail").value
+    }
+
+    if (isEmptyField(student)){
+        alert("Please fill all fields.");
+        return;
+    }
+
+    let image =  document.getElementById("emStudentPicture");
+
+    if(image.complete){
+        let canvas = document.getElementById("canvas");
+        let context = canvas.getContext("2d");
+
+        canvas.width = image.naturalWidth;
+        canvas.height = image.naturalHeight;
+
+        context.drawImage(image, 0, 0);
+
+        canvas.toBlob(function(blob){
+            updateStudentDetils(blob, student);
+        });
+        
+    }
+    
+}
+
+function updateStudentDetils(blob, student){
+    let formData = new FormData();
+    
+    formData.append('file', blob, "student_image.jpg");
+    formData.append("student", JSON.stringify(student));
+
+    const requestOptions = {
+        method: "PUT",
+        body: formData,
+    };
+
+    fetch("http://localhost:8080/update-student", requestOptions)
+    .then(res => {
+        if(res.ok){
+            alert("Student updated successfull.");
+            
+            document.getElementById("editModal").classList.add("d-none");
+            document.getElementById("freez").classList.add("d-none");
+
+            setTimeout(() => {
+                studentListPageOnLoad();
+            }, 500);
+        }else{
+            alert("Something went wrong! Please try again.")
+        }
+    });
+}
+
+function discardChnagesOrNot(event){
+    if(confirm("Discard changes?")){
+        document.getElementById("editModal").classList.add("d-none");
+        event.target.classList.add("d-none");
+    }
+}
+
+function isEmptyField(student){    
+    return isBlank(student.name) || isNaN(student.age) || isBlank(student.gender) || isBlank(student.contact) || isBlank(student.email);
+}
+
+function deleteStudent(event){
+    let tr = event.target.parentElement.parentElement;
+    let studentId = tr.children[1].innerText;
+
+    if(confirm(`Delete Student: ${studentId} \nConfirm deletion.`)){
+        const requestOptions = {
+            method: "DELETE",
+            redirect: "follow"
+        };
+          
+        fetch(`http://localhost:8080/delete-student/${studentId}`, requestOptions)
+        .then(res => {
+            if(res.ok){
+                studentListPageOnLoad();
+            }
+        })
+    }
 }

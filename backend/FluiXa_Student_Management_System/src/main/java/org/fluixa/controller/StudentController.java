@@ -36,4 +36,19 @@ public class StudentController {
     public Student getStudentById(@PathVariable String studentId){
         return service.getStudentById(studentId);
     }
+
+    @PutMapping("update-student")
+    public void updateStudent(@RequestPart("student") String studentJson, @RequestPart("file") MultipartFile imageFile){
+        try {
+            Student student = new ObjectMapper().readValue(studentJson, Student.class);
+            service.updateStudent(student, imageFile);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @DeleteMapping("delete-student/{studentId}")
+    public void deleteStudent(@PathVariable String studentId){
+        service.deleteStudentById(studentId);
+    }
 }

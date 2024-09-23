@@ -9,7 +9,7 @@ import java.util.List;
 public interface StudentService {
     void addStudent(Student student, MultipartFile file) throws IOException;
     List<Student> getAllStudents();
-    void updateStudent(Student student);
+    void updateStudent(Student student, MultipartFile file)throws IOException;
     void deleteStudentById(String studentId);
     Student getStudentById(String studentId);
 }
