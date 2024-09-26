@@ -110,24 +110,33 @@ function loadStudents(){
 
     fetch("http://localhost:8080/student")
     .then(res => res.json())
-    .then(data => {
+    .then(student => {
 
-        for (let i = 0; i < data.length; i++) {
-            studentList += `<tr id="${data[i].studentId}" onclick="openContactModal(event)">
-                                <td class="text-center">${i + 1}</td>
-                                <td class="text-center">${data[i].studentId}</td>
-                                <td>${data[i].name}</td>
-                                <td class="text-center">${data[i].age}</td>
-                                <td> - </td>
-                                <td>
-                                    <i onclick="openEditModal(event)" class="fa-solid fa-pencil ps-4 me-4"></i>
-                                    <i onclick="deleteStudent(event)" class="fa-solid fa-trash-can"></i>
-                                </td>
-                            </tr>`
-        }
+        fetch("http://localhost:8080/get-guardians")
+        .then(res => res.json())
+        .then(guardians => {
+            for (let i = 0; i < student.length; i++) {
+                studentList += `<tr id="${student[i].studentId}" onclick="openContactModal(event)">
+                                    <td class="tbl-stu-picture my-0">
+                                        <div class="mx-auto">
+                                            <img src="${"data:image/jpeg;base64,"+student[i].studentPicture}" />
+                                        </div>
+                                    </td>
+                                    <td class="text-center">${i + 1}</td>
+                                    <td class="text-center">${student[i].studentId}</td>
+                                    <td>${student[i].name}</td>
+                                    <td class="text-center">${student[i].age}</td>
+                                    <td>${guardians[i].address}</td>
+                                    <td>
+                                        <i onclick="openEditModal(event)" class="fa-solid fa-pencil ps-4 me-4"></i>
+                                        <i onclick="deleteStudent(event)" class="fa-solid fa-trash-can"></i>
+                                    </td>
+                                </tr>`
+            }
+               
+            tBody.innerHTML = studentList;
 
-        
-        tBody.innerHTML = studentList;
+        });
         
     });   
     
@@ -150,6 +159,15 @@ function openContactModal(event){
        document.getElementById("email").innerHTML = data.email;
 
        document.getElementById("studentPicture").src = "data:image/jpeg;base64," + data.studentPicture;
+
+       fetch(`http://localhost:8080/get-guardian/${tr.id}`)
+       .then(res => res.json())
+       .then(guardian => {
+            console.log(guardian);
+            document.getElementById("gurName").innerHTML = guardian.name;
+            document.getElementById("gurAddress").innerHTML = guardian.address;
+            document.getElementById("gurContact").innerHTML = guardian.contact;
+       });
     });
 
     let modal = document.getElementById("contactModal");
@@ -171,6 +189,16 @@ function setStudentId(){
     });
 }
 
+function clearFields(){
+    let inputFields = document.getElementsByClassName("form-field");
+    
+    for (let i = 0; i < inputFields.length; i++) {
+        console.log(inputFields[i].children[0]);
+        inputFields[i].children[1].value = null;
+        inputFields[i].classList.remove("filled");
+    }
+    
+}
 
 function btnRegiterOnClick(){    
 
@@ -212,15 +240,41 @@ function btnRegiterOnClick(){
           fetch("http://localhost:8080/add-student", requestOptions)
           .then(res => {
             if(res.ok){
-                alert("Student registration successfull.");
-                cropper = null;
-                location.reload();
-            }else{
-                alert("Something went wrong! Please try again.")
+
+                const raw = JSON.stringify({
+                    studentId: student.studentId,
+                    guardianId: student.studentId.replace("STU", "GUR"),
+                    name: document.getElementById("txtGuarFullName").value,
+                    address: document.getElementById("txtGuarAddress").value,
+                    contact: document.getElementById("txtGuarContact").value
+                });
+            
+                const myHeaders = new Headers();
+                myHeaders.append("Content-Type", "application/json");
+            
+                const requestOptions = {
+                    method: "POST",
+                    headers: myHeaders,
+                    body: raw,
+                };
+            
+                fetch("http://localhost:8080/add-guardian", requestOptions)
+                .then(res => {
+                    if(res.ok){
+                        alert("Student registration successfull.");
+                        cropper = null;
+                        location.reload();
+                    }else{
+                        alert("Something went wrong! Please try again.")
+                    }
+                });
             }
           })
 
     }, 'image/jpeg');
+
+
+
     
 }
 
@@ -326,6 +380,15 @@ function openEditModal(event){
         document.getElementById("emStudentId").innerText = data.studentId;
         
         document.getElementById("emStudentPicture").src = "data:image/jpeg;base64," + data.studentPicture;
+
+        fetch(`http://localhost:8080/get-guardian/${tr.id}`)
+       .then(res => res.json())
+       .then(guardian => {
+            console.log(guardian);
+            document.getElementById("txtGuarName").value = guardian.name;
+            document.getElementById("txtGuarAddress").value = guardian.address;
+            document.getElementById("txtGuarContact").value = guardian.contact;
+       });
     });
     
     let modal = document.getElementById("editModal");
@@ -382,14 +445,41 @@ function updateStudentDetils(blob, student){
     fetch("http://localhost:8080/update-student", requestOptions)
     .then(res => {
         if(res.ok){
-            alert("Student updated successfull.");
-            
-            document.getElementById("editModal").classList.add("d-none");
-            document.getElementById("freez").classList.add("d-none");
 
-            setTimeout(() => {
-                studentListPageOnLoad();
-            }, 500);
+            const raw = JSON.stringify({
+                studentId: student.studentId,
+                guardianId: student.studentId.replace("STU", "GUR"),
+                name: document.getElementById("txtGuarName").value,
+                address: document.getElementById("txtGuarAddress").value,
+                contact: document.getElementById("txtGuarContact").value
+            });
+        
+            const myHeaders = new Headers();
+            myHeaders.append("Content-Type", "application/json");
+        
+            const requestOptions = {
+                method: "PUT",
+                headers: myHeaders,
+                body: raw,
+            };
+        
+            fetch("http://localhost:8080/update-guardian", requestOptions)
+            .then(res => {
+                if(res.ok){
+                    alert("Student updated successfull.");
+            
+                    document.getElementById("editModal").classList.add("d-none");
+                    document.getElementById("freez").classList.add("d-none");
+
+                    setTimeout(() => {
+                        studentListPageOnLoad();
+                    }, 500);
+
+                }else{
+                    alert("Something went wrong! Please try again.")
+                }
+            });
+            
         }else{
             alert("Something went wrong! Please try again.")
         }

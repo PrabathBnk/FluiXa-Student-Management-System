@@ -1,29 +1,25 @@
 package org.fluixa.dto;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import jakarta.persistence.Lob;
+import jakarta.persistence.IdClass;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.sql.Blob;
+import org.fluixa.util.GuardianId;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Student {
+@IdClass(GuardianId.class)
+public class Guardian {
+
     @Id
     private String studentId;
+    @Id
+    private String guardianId;
     private String name;
-    private Integer age;
-    private String gender;
+    private String address;
     private String contact;
-    private String email;
-    @Lob
-    @Column(columnDefinition = "MEDIUMBLOB")
-    private String studentPicture;
-
 }
